@@ -1,67 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Rental Price Predictor</title>
+    <meta charset="UTF-8">
+    <title>Rental Price Prediction</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .section-title {
+            margin: 25px 0 10px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .field {
+            flex: 1;
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input, select {
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1e4fd6;
+        }
+
+        #result {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #0f766e;
+        }
+    </style>
 </head>
+
 <body>
+<div class="container">
     <h2>Rental Price Prediction Demo</h2>
 
-    <label>House Type</label><br>
-    <input id="house_type" value="2 BHK Flat"><br><br>
+    <div class="section-title">Property Details</div>
 
-    <label>Locality</label><br>
-    <input id="locality" value="Goregaon East"><br><br>
+    <div class="row">
+        <div class="field">
+            <label>House Type</label>
+            <input id="house_type" value="2 BHK Flat">
+        </div>
 
-    <label>City</label><br>
-    <input id="city" value="Mumbai"><br><br>
+        <div class="field">
+            <label>Locality</label>
+            <input id="locality" value="Goregaon East">
+        </div>
 
-    <label>Area (sqft)</label><br>
-    <input id="area" type="number" value="897"><br><br>
+        <div class="field">
+            <label>City</label>
+            <select id="city">
+                <option>Mumbai</option>
+                <option>Pune</option>
+                <option>Bangalore</option>
+                <option>New Delhi</option>
+                <option>Nagpur</option>
+            </select>
+        </div>
 
-    <label>Beds</label><br>
-    <input id="beds" type="number" value="2"><br><br>
+        <div class="field">
+            <label>Furnishing</label>
+            <select id="furnishing">
+                <option>Semi-Furnished</option>
+                <option>Unfurnished</option>
+                <option>Fully Furnished</option>
+            </select>
+        </div>
+    </div>
 
-    <label>Bathrooms</label><br>
-    <input id="bathrooms" type="number" value="2"><br><br>
+    <div class="section-title">Numerical Features</div>
 
-    <label>Balconies</label><br>
-    <input id="balconies" type="number" value="0"><br><br>
+    <div class="row">
+        <div class="field">
+            <label>Area (sqft)</label>
+            <input id="area" type="number" value="897">
+        </div>
 
-    <label>Furnishing</label><br>
-    <input id="furnishing" value="Semi-Furnished"><br><br>
+        <div class="field">
+            <label>Beds</label>
+            <input id="beds" type="number" value="2">
+        </div>
 
-    <label>Area Rate</label><br>
-    <input id="area_rate" type="number" value="134"><br><br>
+        <div class="field">
+            <label>Bathrooms</label>
+            <input id="bathrooms" type="number" value="2">
+        </div>
+
+        <div class="field">
+            <label>Balconies</label>
+            <input id="balconies" type="number" value="0">
+        </div>
+
+        <div class="field">
+            <label>Area Rate</label>
+            <input id="area_rate" type="number" value="134">
+        </div>
+    </div>
 
     <button onclick="predict()">Predict Rent</button>
 
-    <h3 id="result"></h3>
+    <div id="result"></div>
+</div>
 
-    <script>
-        function predict() {
-            const data = {
-                house_type: document.getElementById("house_type").value,
-                locality: document.getElementById("locality").value,
-                city: document.getElementById("city").value,
-                area: Number(document.getElementById("area").value),
-                beds: Number(document.getElementById("beds").value),
-                bathrooms: Number(document.getElementById("bathrooms").value),
-                balconies: Number(document.getElementById("balconies").value),
-                furnishing: document.getElementById("furnishing").value,
-                area_rate: Number(document.getElementById("area_rate").value)
-            };
+<script>
+    function predict() {
+        const data = {
+            house_type: document.getElementById("house_type").value,
+            locality: document.getElementById("locality").value,
+            city: document.getElementById("city").value,
+            furnishing: document.getElementById("furnishing").value,
+            area: Number(document.getElementById("area").value),
+            beds: Number(document.getElementById("beds").value),
+            bathrooms: Number(document.getElementById("bathrooms").value),
+            balconies: Number(document.getElementById("balconies").value),
+            area_rate: Number(document.getElementById("area_rate").value)
+        };
 
-            fetch("http://127.0.0.1:8000/predict", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                document.getElementById("result").innerText =
-                    "Predicted Rent: " + result.predicted_rent;
-            });
-        }
-    </script>
+        fetch("http://127.0.0.1:8000/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(result => {
+            document.getElementById("result").innerText =
+                "Predicted Monthly Rent: " + result.predicted_rent;
+        });
+    }
+</script>
 </body>
 </html>
