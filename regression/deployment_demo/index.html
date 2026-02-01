@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rental Price Predictor</title>
+</head>
+<body>
+    <h2>Rental Price Prediction Demo</h2>
+
+    <label>House Type</label><br>
+    <input id="house_type" value="2 BHK Flat"><br><br>
+
+    <label>Locality</label><br>
+    <input id="locality" value="Goregaon East"><br><br>
+
+    <label>City</label><br>
+    <input id="city" value="Mumbai"><br><br>
+
+    <label>Area (sqft)</label><br>
+    <input id="area" type="number" value="897"><br><br>
+
+    <label>Beds</label><br>
+    <input id="beds" type="number" value="2"><br><br>
+
+    <label>Bathrooms</label><br>
+    <input id="bathrooms" type="number" value="2"><br><br>
+
+    <label>Balconies</label><br>
+    <input id="balconies" type="number" value="0"><br><br>
+
+    <label>Furnishing</label><br>
+    <input id="furnishing" value="Semi-Furnished"><br><br>
+
+    <label>Area Rate</label><br>
+    <input id="area_rate" type="number" value="134"><br><br>
+
+    <button onclick="predict()">Predict Rent</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+        function predict() {
+            const data = {
+                house_type: document.getElementById("house_type").value,
+                locality: document.getElementById("locality").value,
+                city: document.getElementById("city").value,
+                area: Number(document.getElementById("area").value),
+                beds: Number(document.getElementById("beds").value),
+                bathrooms: Number(document.getElementById("bathrooms").value),
+                balconies: Number(document.getElementById("balconies").value),
+                furnishing: document.getElementById("furnishing").value,
+                area_rate: Number(document.getElementById("area_rate").value)
+            };
+
+            fetch("http://127.0.0.1:8000/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById("result").innerText =
+                    "Predicted Rent: " + result.predicted_rent;
+            });
+        }
+    </script>
+</body>
+</html>
