@@ -51,7 +51,7 @@ regression/
 3. Run the FastAPI server:
 
    ```bash
-   python -m uvicorn app:app --reload
+   uv uvicorn app:app --reload
    ```
 4. The API will start at:
 
@@ -63,13 +63,21 @@ regression/
 
 ## 🌐 Step 3: Open the UI and Predict
 
-1. Open the file:
+1. HTML Based approch. 
+   Open the file:
 
    ```
    deployment_demo/index.html
    ```
 
    (Double-click or open with a browser)
+
+   or 
+   Run a python-based server (like Streamlit) to serve the UI:
+   ```
+   uv run streamlit run streamlit_app.py
+   ```
+
 
 2. Enter or modify the property details.
 
